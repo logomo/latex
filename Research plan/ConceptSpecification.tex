@@ -1,0 +1,186 @@
+\section{Concept specification}
+\subsubsection{LiDAR}
+LiDAR is planned to be used as main active data input. Low-density lidar (https://www.kickstarter.com/projects/scanse/sweep-scanning-lidar/description) can be used in UAV applications 
+in standby mode or scan/sweep mode.
+Low density LiDAR is ideal for feature extraction which is used mainly in Geographical Information Systems
+
+\begin{enumerate}[]
+	\item \textbf{Role}
+	    \begin{enumerate}[]
+		    \item Data gathering of current vehicle surroundings
+		\end{enumerate}
+	\item \textbf{Output:}
+	    \begin{enumerate}[1.]
+		\item Point cloud of data
+		\end{enumerate}
+\end{enumerate}
+
+
+\subsubsection{Edge detector}
+Algorithm to detect edges in 3D point cloud
+\begin{enumerate}[]
+	\item \textbf{Role:}
+		\begin{enumerate}[]
+		\item Initial object reconstruction from given point cloud. The greedy approach can be used to reconstruct planes and create triangular based model which is the base for feature extraction and reconstruction. Use of fast algorithms for edge reconstruction [1] and plane detection.
+		\end{enumerate}
+	\item \textbf{Input:}
+		\begin{enumerate}[1.]
+		\item LiDAR point cloud.
+		\end{enumerate}	
+	\item \textbf{Output:}
+		\begin{enumerate}[1.]
+		\item Extracted edges - aggregation of multiple 3D points into edge which satisfies 
+		\item Crosscutting point of edges
+		\end{enumerate}
+\end{enumerate}
+	
+\subsubsection{Feature extraction}
+Algorithm to extract features from detected edges (notable features are outer boundaries or object cubes)
+	\begin{enumerate}[]
+	\item \textbf{Role:}
+		\begin{enumerate}[]
+		\item Notable points, like corners, bordering edges of physical objects extraction
+		Minimalisation of surroundings representation, before data fusion and trajectory calculation. 
+		\item Goal is to have reduced model of surroundings, therefore applied data fusion and obstacle avoidance calculations are reduced to minimum
+		\end{enumerate}
+	\item \textbf{Input:}
+		\begin{enumerate}[1.]
+		\item Extracted edges
+		\item Crosscutting points
+		\end{enumerate}
+	\item \textbf{Output:}
+		\begin{enumerate}[1.]
+		\item Feature edges
+		\item Feature crosscutting points
+		\end{enumerate}
+	\end{enumerate}
+	
+\subsubsection{IMU (Internal measurement unit)}
+	Standard hardware unit to measure internal vehicle state
+	\begin{enumerate}[]
+	\item \textbf{Role:}
+		\begin{enumerate}[]
+		\item Provide local state of vehicle, roll, pitch, yaw angles, heading and speed
+		\end{enumerate}
+	\item \textbf{Output:}
+		\begin{enumerate}[1.]
+		\item Roll, pitch, yaw angles 
+		\item Heading speed
+		\end{enumerate}
+	\end{enumerate}
+	
+\subsubsection{GPS}
+	Global Positioning System, with very precise vehicle location
+	\begin{enumerate}[]
+	\item \textbf{Role:}
+		\begin{enumerate}[]
+		\item Provide precise position of vehicle in terms of global position. 
+		Expected to use RTK GPS for precise location [2].
+		Precise location of vehicle 1-2 cm horizontal plane, 3-4 cm vertical *(Altitude estimation).
+		Technical solution from NTNU will be reused (probably).
+		\end{enumerate}
+	\item \textbf{Input:}
+		\begin{enumerate}[1.]
+			\item RTK GPS from ground station position.
+			\item IMU differentials.
+		\end{enumerate}
+	\item \textbf{Output:}
+		\begin{enumerate}[1.]
+		\item Precise global position of vehicle.
+		\end{enumerate}
+	\end{enumerate}
+	
+\subsubsection{External map}
+	External obstacle map, which can be reconstructed from previous flights data, or shared obstacle database
+	\begin{enumerate}[a.]
+		\item Source databases to be determined.
+		\item Used technologies to be determined.
+	\end{enumerate}
+	\begin{enumerate}[]
+	\item \textbf{Role:}
+		\begin{enumerate}[]
+		\item Provide preexisting obstacles and limitations in flight area (like high voltage cables, restricted flight areas, etc.).
+		\end{enumerate}
+	\item \textbf{Output:}
+		\begin{enumerate}[]
+		\item Local obstacle map in plane surroundings (It must be determined if whole mission area or radius area around vehicle will be used)
+		\end{enumerate}
+	\end{enumerate}
+
+\subsubsection{Data fusion:}
+Fuse data from various sources and complete plane surroundings model for immediate or planned obstacle, model. Data Fusion will merge existing obstacles from obstacle databases with newly detected obstacles and their features. Data fusion will recognize and name moving obstacles (I am uncertain at this more material review is required)Data fusion will use global position to assign global position to newly detected obstacles.
+	\begin{enumerate}[]
+	\item \textbf{Role:}
+		\begin{enumerate}[]
+		\item Main data fusion and operation environment calculation, merging point of all inputs.
+		\end{enumerate}
+	\item \textbf{Input:}
+		\begin{enumerate}[1.]
+		\item RTK GPS: global position.
+		\item IMU: roll, pitch, yaw angles, heading and speed (vectorized)
+		\item Feature extraction: extracted features corners and positions
+		\item External obstacle map:  global position of known static obstacles
+		\end{enumerate}
+	\item \textbf{Output:}
+		\begin{enumerate}[1.]
+		\item Fused data of obstacles
+		\item Expected trajectories of moving obstacles
+		\end{enumerate}
+	\end{enumerate}
+	
+\subsubsection{Obstacle model (Moving oblstacle model)}
+Predictor of obstacle movement.
+	\begin{enumerate}[]
+	\item \textbf{Role:}
+		\begin{enumerate}[]
+		\item Predict obstacle movement and possible collision points in terms of current mission plan. 
+		\end{enumerate}
+	\item \textbf{Input:}
+		\begin{enumerate}[1.]
+		\item Data fusion - moving obstacles position (Global). 
+		\item Data fusion - moving obstacle heading (Vectorized).
+		\item Actual mission plan.
+		\end{enumerate}
+	\item \textbf{Output:}[1.]
+		\begin{enumerate}
+		\item Predicted Collision points for actual mission plan.
+		\item Additional movement constraints based on predicted trajectories.
+		\end{enumerate}
+	\end{enumerate}
+
+\subsubsection{Smart J* (Optimal trajectory calculation)}
+	Optimal trajectory calculation with flight cost minimalization
+	\begin{enumerate}[]
+	\item \textbf{Role:}
+		\begin{enumerate}[]
+		\item Calculate optimal path to avoid all static and moving obstacles. 
+		\end{enumerate}
+	\item \textbf{Input:}
+		\begin{enumerate}[1.]
+		\item IMU: vehicle state(roll, pitch, yaw, heading).
+		\item Data fusion - static obstacle map for target area.
+		\item Obstacle model - moving obstacle model, with projected trajectories and constraints.
+		\end{enumerate}
+	\item \textbf{Output:}
+		\begin{enumerate}[1.]
+		\item Optimal trajectory to avoid obstacles.
+		\item Update to actual mission plan.
+		\end{enumerate}
+	\end{enumerate}
+	
+\subsubsection{PID (Vehicle controller - Autopilot)}
+	Low level control of vehicle on desired trajectory
+	\begin{enumerate}[]
+	\item \textbf{Role:}
+		\begin{enumerate}[]
+		\item Low level control of vehicle motors ...
+		\end{enumerate}
+	\item \textbf{Input:}
+		\begin{enumerate}[1.]
+		\item Desired trajectory
+		\end{enumerate}
+	\item \textbf{Output:}
+		\begin{enumerate}[2.]
+		\item Control inputs 
+		\end{enumerate}
+	\end{enumerate}

@@ -1,0 +1,115 @@
+%%%%% Single page layout:
+%%%%% ----------------------------------------------------
+\documentclass[12pt, a4paper]{report}
+\setlength\textwidth{145mm}
+\setlength\textheight{247mm}
+\setlength\oddsidemargin{15mm}
+\setlength\evensidemargin{15mm}
+\setlength\topmargin{0mm}
+\setlength\headsep{0mm}
+\setlength\headheight{0mm}
+\let\openright=\clearpage
+\usepackage[utf8]{inputenc}
+
+%%% Additional useful packages
+%%% ----------------------------------------------------------------
+\usepackage{amsmath}        
+\usepackage{amsfonts}       
+\usepackage{amsthm}         
+\usepackage{bm}             
+\usepackage{graphicx}       
+\usepackage{psfrag}         
+\usepackage{fancyvrb}       
+\usepackage[round]{natbib}         
+\usepackage{bbding}         
+\usepackage{dcolumn}        
+\usepackage{booktabs}       
+\usepackage{paralist}       
+\usepackage{indentfirst}    
+\usepackage[nottoc,notlof,notlot]{tocbibind}
+\usepackage{tocloft}
+
+\usepackage[unicode]{hyperref}
+\hypersetup{pdftitle=Thesis Title, 
+            pdfauthor=Name Surname,
+            ps2pdf,
+            colorlinks=false,
+            urlcolor=blue,
+            pdfstartview=FitH,
+            pdfpagemode=UseOutlines,
+            pdfnewwindow,
+            breaklinks
+          }
+          
+\newcommand{\FIGDIR}{./Pics}    %%% directory containing figures
+
+
+\theoremstyle{plain}
+\newtheorem{veta}{Theorem}
+\newtheorem{lemma}[veta]{Lemma}
+\newtheorem{tvrz}[veta]{Proposition}
+
+\theoremstyle{plain}
+\newtheorem{definice}{Definition}
+
+\theoremstyle{remark}
+\newtheorem*{dusl}{Corollary}
+\newtheorem*{pozn}{Note}
+\newtheorem*{prikl}{Example}
+
+
+\newenvironment{dukaz}{
+  \par\medskip\noindent
+  \textit{Proof}.
+}{
+\newline
+\rightline{\SquareCastShadowBottomRight}
+}
+
+
+%\bibliographystyle{plainnat}     %% Author (year) style
+\bibliographystyle{unsrt}        %% [number] style
+
+\title{FEUP research plan}
+\author{Alojz Gomola}
+\date{May 2016}
+
+%%%%% ------------------------------------------------------------
+\DefineVerbatimEnvironment{PCinout}{Verbatim}{fontsize=\small, frame=single}
+
+
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+
+\DeclareMathOperator{\pr}{\textsf{P}}
+\DeclareMathOperator{\E}{\textsf{E}\,}
+\DeclareMathOperator{\var}{\textrm{var}}
+\DeclareMathOperator{\sd}{\textrm{sd}}
+
+
+\newcommand{\T}[1]{#1^\top}        
+
+\newcommand{\goto}{\rightarrow}
+\newcommand{\gotop}{\stackrel{P}{\longrightarrow}}
+\newcommand{\maon}[1]{o(n^{#1})}
+\newcommand{\abs}[1]{\left|{#1}\right|}
+\newcommand{\dint}{\int_0^\tau\!\!\int_0^\tau}
+\newcommand{\isqr}[1]{\frac{1}{\sqrt{#1}}}
+
+\newcommand{\pulrad}[1]{\raisebox{1.5ex}[0pt]{#1}}
+\newcommand{\mc}[1]{\multicolumn{1}{c}{#1}}
+
+\begin{document}
+
+%Title page 
+\include{TitlePage}
+
+%first chapter Introduction
+\chapter{Introduction}
+
+\section{Problem statement}
+\section{Assumptions}
+\include{ConceptSpecification}
+
+\end{document}

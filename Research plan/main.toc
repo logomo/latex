@@ -1,0 +1,14 @@
+\contentsline {chapter}{\numberline {1}Introduction}{4}{chapter.1}
+\contentsline {section}{\numberline {1.1}Problem statement}{4}{section.1.1}
+\contentsline {section}{\numberline {1.2}Assumptions}{4}{section.1.2}
+\contentsline {section}{\numberline {1.3}Concept specification}{5}{section.1.3}
+\contentsline {subsubsection}{LiDAR}{5}{section*.1}
+\contentsline {subsubsection}{Edge detector}{5}{section*.2}
+\contentsline {subsubsection}{Feature extraction}{5}{section*.3}
+\contentsline {subsubsection}{IMU (Internal measurement unit)}{6}{section*.4}
+\contentsline {subsubsection}{GPS}{6}{section*.5}
+\contentsline {subsubsection}{External map}{6}{section*.6}
+\contentsline {subsubsection}{Data fusion:}{7}{section*.7}
+\contentsline {subsubsection}{Obstacle model (Moving oblstacle model)}{7}{section*.8}
+\contentsline {subsubsection}{Smart J* (Optimal trajectory calculation)}{8}{section*.9}
+\contentsline {subsubsection}{PID (Vehicle controller - Autopilot)}{8}{section*.10}
